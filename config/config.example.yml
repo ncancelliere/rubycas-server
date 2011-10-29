@@ -471,6 +471,16 @@ database:
 # like logo.png and bg.png.
 #
 # By default, we use the 'simple' theme which you can find in themes/simple.
+# If the theme cannot be resolved it will fall back to 'simple'.
+#
+# Alternatively you can map multiple domains to different themes, if desired.
+# theme:
+#   my_awesome_theme:
+#     - site1.mysite.com
+#     - site2.mysite.com
+#   another_one:
+#     - admin.mysite.com
+#
 theme: simple
 
 # The name of your company/organization. This will show up on the login page.

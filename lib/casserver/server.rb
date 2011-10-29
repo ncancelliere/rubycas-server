@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'casserver/localization'
 require 'casserver/utils'
 require 'casserver/cas'
+require 'casserver/themes'
 
 require 'logger'
 $LOG ||= Logger.new(STDOUT)
@@ -18,6 +19,7 @@ module CASServer
     
     include CASServer::CAS # CAS protocol helpers
     include Localization
+    include Themes
 
     set :app_file, __FILE__
     set :public, Proc.new { settings.config[:public_dir] || File.join(root, "..", "..", "public") }
@@ -140,6 +142,7 @@ module CASServer
       init_database!
       init_logger!
       init_authenticators!
+      init_themes!
     end
 
     def self.handler_options
@@ -278,12 +281,13 @@ module CASServer
       init_logger!
       init_database!
       init_authenticators!
+      init_themes!
     end
 
     before do
       GetText.locale = determine_locale(request)
       content_type :html, 'charset' => 'utf-8'
-      @theme = settings.config[:theme]
+      @theme = resolve_theme(clean_service_url(params['service'] || params['destination']))
       @organization = settings.config[:organization]
       @uri_path = settings.config[:uri_path]
       @infoline = settings.config[:infoline]
